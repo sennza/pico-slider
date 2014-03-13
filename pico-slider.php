@@ -62,6 +62,7 @@ class Pico_Slider {
 			'can_export'          => true,
 			'rewrite'             => true,
 			'capability_type'     => 'post',
+			'menu_icon'						=> 'dashicons-slides'
 		);
 
 		register_post_type( 'slider', $args );
