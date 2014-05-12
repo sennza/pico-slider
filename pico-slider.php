@@ -1,4 +1,5 @@
 <?php
+
 /*
 Plugin Name: Pico Slider
 Plugin URI: http://www.sennza.com.au/
@@ -12,19 +13,20 @@ class Pico_Slider {
 	private static $instance;
 
 	static function get_instance() {
-		if ( ! self::$instance )
+		if ( ! self::$instance ) {
 			self::$instance = new Pico_Slider;
+		}
 
 		return self::$instance;
 	}
 
 	public function __construct() {
-		add_action( 'init',                      array( $this, 'register_slider' ) );
-		add_action( 'init',                      array( $this, 'slider_rewrite_flush' ) );
-		add_action( 'wp_enqueue_scripts',        array( $this, 'slider_scripts' ) );
-		add_action( 'save_post',                 array( $this, 'save_slider_meta' ) );
-		add_action( 'add_meta_boxes',            array( $this, 'add_slider_meta_boxes' ) );
-		add_filter( 'enter_title_here',          array( $this, 'change_slider_title' ) );
+		add_action( 'init', array( $this, 'register_slider' ) );
+		add_action( 'init', array( $this, 'slider_rewrite_flush' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'slider_scripts' ) );
+		add_action( 'save_post', array( $this, 'save_slider_meta' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_slider_meta_boxes' ) );
+		add_filter( 'enter_title_here', array( $this, 'change_slider_title' ) );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'slider_post_thumbnail_html' ) );
 	}
 
@@ -67,157 +69,104 @@ class Pico_Slider {
 
 		register_post_type( 'slider', $args );
 
-		if ( function_exists( 'add_image_size' ) ) {
-			add_image_size( 'slider-thumb', 524, 9999 );
-		}
+		add_image_size( 'slider-thumb', 970, 9999 );
 	}
 
-	public function do_slider() {
-		?>
-				<?php $args   = array(
-				'post_type'      => 'slider',
-				'posts_per_page' => -1
-			);
-				$slider_items = new WP_Query( $args );
-				if ( $slider_items ): ?>
-				<div class="pico-slider-container">
-					<div class="flexslider">
-							<ul class="slides">
-								<?php while ( $slider_items->have_posts() ) : $slider_items->the_post(); ?>
-									<?php
-									$image_alignment = get_post_meta( $slider_items->post->ID, 'imagealignment', true );
-									$slider_video_url = get_post_meta( $slider_items->post->ID, 'slider_video_url', true );
-									$button_1_link = get_post_meta( $slider_items->post->ID, 'button_1_link', true );
-									$button_1_title      = get_post_meta( $slider_items->post->ID, 'button_1_title', true );
-									$button_2_link       = get_post_meta( $slider_items->post->ID, 'button_2_link', true );
-									$button_2_title      = get_post_meta( $slider_items->post->ID, 'button_2_title', true ); ?>
-									<li>
-										<div class="slider-content">
-												<div class="title"><h2><?php the_title(); ?></h2>
-														<h3>With branded Internet videos</h3></div>
-												<div class="subtitle">
-													<?php the_content(); ?>
-													<?php edit_post_link( __( 'Edit', 'slider' ), '<span class="edit-link">', '</span>', $slider_items->post->ID ); ?>
-														<ol class="cta-buttons">
-																<?php if ( $button_1_link ): ?>
-																	<li><a class="blue-button" href="<?php echo esc_url( $button_1_link ); ?>"><?php echo wptexturize( esc_html( $button_1_title ) ); ?></a></li>
-																<?php endif; ?>
-																<?php if ( $button_2_link ): ?>
-																	<li><a class="navy-button" href="<?php echo esc_url( $button_2_link ); ?>"><?php echo wptexturize( esc_html( $button_2_title ) ); ?></a></li>
-																<?php endif; ?>
-														</ol>
-												</div>
-											</div>
-											<div class="slider-image">
-												<?php if (has_post_thumbnail( ) ): ?>
-													<?php $size = 'post-thumbnail' ?>
-													<?php $size = apply_filters( 'post_thumbnail_size', $size ); ?>
-													<?php $thumbnail_args = array (
-														'class' => "attachment-$size $image_alignment"
-														); ?>
-													<?php the_post_thumbnail( 'slider-thumb', $thumbnail_args ); ?>
-													<?php else: ?>
-														<?php echo wp_oembed_get( $slider_video_url, '' ); ?>
-													<?php endif; ?>
-											</div>
-									</li>
-								<?php endwhile; ?>
-							</ul>
-          </div>
-        	</div>
-						<?php if ( $slider_items ): ?>
-							<div class="cta-container">
-									<h2>Sign Up today and recieve 50% off</h2>
-									<h5>All new user accounts are half price for the first year</h5>
-							</div>
-							<div class="slider-navigation">
-							</div>
-							<!-- close the header which was opened in header.php -->
-							</header>
-							<div class="control-container">
-								<ul class="slider-controls">
-								<?php $slider_items->rewind_posts(); ?>
-								<?php while ( $slider_items->have_posts() ) : $slider_items->the_post(); ?>
-									<li><a href="#"></a></li>
-								<?php endwhile; ?>
-								</ul>
-							</div>
-					<?php endif; ?>
-					<?php else: ?>
-            <p>There aren't any sliders.</p>
-					<?php endif; ?>
-				<?php wp_reset_query(); ?>
-	<?php
+	public function do_slider( $args ) {
+		$plugindir        = dirname( __FILE__ );
+		$templatefilename = 'slider-template.php';
+		if ( file_exists( TEMPLATEPATH . '/' . $templatefilename ) ) {
+			$return_template = TEMPLATEPATH . '/' . $templatefilename;
+			require_once( $return_template );
+		} else {
+			$return_template = $plugindir . '/templates/' . $templatefilename;
+			require_once( $return_template );
+		}
 	}
 
 	public function slider_scripts() {
 		if ( is_front_page() ):
 			wp_enqueue_script( 'pico-flexslider', plugins_url( '/js/jquery.flexslider-min.js', __FILE__ ), array( 'jquery' ), '2.1', true );
-			wp_enqueue_script( 'slider-main', plugins_url( '/js/jquery.slider-main.js', __FILE__ ), array( 'jquery', 'pico-flexslider' ), '0.8', true );
+			wp_enqueue_script( 'slider-main', plugins_url( '/js/jquery.slider-main.js', __FILE__ ), array(
+					'jquery',
+					'pico-flexslider'
+				), '0.8', true );
+			wp_enqueue_style( 'pico-flexslider-styles', plugins_url( '/assets/css/flexslider.css', __FILE__ ), array(), 1.0 );
 		endif;
 	}
 
 	public function add_slider_meta_boxes() {
-		add_meta_box( 'slider_video_meta_box', __( 'Video Url' ), array( $this, 'slider_video_meta_box' ), 'slider', 'side', 'core' );
-		add_meta_box( 'cta_meta_box', __( 'Calls To Action' ), array( $this, 'cta_meta_box' ), 'slider', 'side', 'core' );
+		add_meta_box( 'slider_video_meta_box', __( 'Video Url' ), array(
+				$this,
+				'slider_video_meta_box'
+			), 'slider', 'side', 'core' );
+		add_meta_box( 'cta_meta_box', __( 'Calls To Action' ), array(
+				$this,
+				'cta_meta_box'
+			), 'slider', 'side', 'core' );
 		remove_meta_box( 'postimagediv', 'slider', 'side' );
 		add_meta_box( 'postimagediv', 'Slider Image', 'post_thumbnail_meta_box', 'slider', 'side' );
 	}
 
-		public function slider_video_meta_box()
-		{
-			global $post_ID; ?>
+	public function slider_video_meta_box() {
+		global $post_ID; ?>
 
 		<div id="video_meta">
 			<?php
 			$slider_video_url = get_post_meta( $post_ID, 'slider_video_url', true );
 
-			// Video Url ?>
+			// Video Url
+			?>
 			<p>
 				<label for="slider_video_url" style="width:25%; display:inline-block;"><?php _e( 'Video URL:' ); ?></label>
 				<input type="text" id="slider_video_url" name="slider_video_url" value="<?php echo $slider_video_url; ?>" style="width:73%; display:inline-block;" />
-				<p>The link to your video on YouTube or Vimeo.</p>
+
+			<p>The link to your video on YouTube or Vimeo.</p>
 			</p>
 		</div>
-		<?php
-		}
+	<?php
+	}
 
 	public function cta_meta_box() {
 		global $post_ID; ?>
 
-  <div id="slider_meta">
-		<?php
-		wp_nonce_field( plugin_basename( __FILE__ ), 'slider_nonce' );
-		$button_1_link    = get_post_meta( $post_ID, 'button_1_link', true );
-		$button_1_title   = get_post_meta( $post_ID, 'button_1_title', true );
-		$button_2_link    = get_post_meta( $post_ID, 'button_2_link', true );
-		$button_2_title   = get_post_meta( $post_ID, 'button_2_title', true ); ?>
+		<div id="slider_meta">
+			<?php
+			wp_nonce_field( plugin_basename( __FILE__ ), 'slider_nonce' );
+			$button_1_link  = get_post_meta( $post_ID, 'button_1_link', true );
+			$button_1_title = get_post_meta( $post_ID, 'button_1_title', true );
+			$button_2_link  = get_post_meta( $post_ID, 'button_2_link', true );
+			$button_2_title = get_post_meta( $post_ID, 'button_2_title', true ); ?>
 
-		<?php
-		// Button 1 Link ?>
-      <p>
-          <label for="button_1_link" style="width:80px; display:inline-block;"><?php _e( "Button 1 Link:" ); ?></label>
-          <input type="text" id="button_1_link" name="button_1_link" value="<?php echo wptexturize( esc_html( $button_1_link) ); ?>" size="25" />
-      </p>
-		<?php
-		// Button 1 Title ?>
-      <p>
-          <label for="button_1_title" style="width:80px; display:inline-block;"><?php _e( "Button 1 Title:" ); ?></label>
-          <input type="text" id="button_1_title" name="button_1_title" value="<?php echo wptexturize( esc_html( $button_1_title ) ); ?>" size="25" />
-      </p>
-		<?php
-		// Button 2 Link ?>
-      <p>
-          <label for="button_2_link" style="width:80px; display:inline-block;"><?php _e( "Button 2 Link:" ); ?></label>
-          <input type="text" id="button_2_link" name="button_2_link" value="<?php echo wptexturize( esc_html( $button_2_link ) ); ?>" size="25" />
-      </p>
-		<?php
-		// Button 2 Title ?>
-      <p>
-          <label for="button_2_title" style="width:80px; display:inline-block;"><?php _e( "Button 2 Title:" ); ?></label>
-          <input type="text" id="button_2_title" name="button_2_title" value="<?php echo wptexturize( esc_html( $button_2_title ) ); ?>" size="25" />
-      </p>
-  </div>
+			<?php
+			// Button 1 Link
+			?>
+			<p>
+				<label for="button_1_link" style="width:80px; display:inline-block;"><?php _e( "Button 1 Link:" ); ?></label>
+				<input type="text" id="button_1_link" name="button_1_link" value="<?php echo wptexturize( esc_html( $button_1_link ) ); ?>" size="25" />
+			</p>
+			<?php
+			// Button 1 Title
+			?>
+			<p>
+				<label for="button_1_title" style="width:80px; display:inline-block;"><?php _e( "Button 1 Title:" ); ?></label>
+				<input type="text" id="button_1_title" name="button_1_title" value="<?php echo wptexturize( esc_html( $button_1_title ) ); ?>" size="25" />
+			</p>
+			<?php
+			// Button 2 Link
+			?>
+			<p>
+				<label for="button_2_link" style="width:80px; display:inline-block;"><?php _e( "Button 2 Link:" ); ?></label>
+				<input type="text" id="button_2_link" name="button_2_link" value="<?php echo wptexturize( esc_html( $button_2_link ) ); ?>" size="25" />
+			</p>
+			<?php
+			// Button 2 Title
+			?>
+			<p>
+				<label for="button_2_title" style="width:80px; display:inline-block;"><?php _e( "Button 2 Title:" ); ?></label>
+				<input type="text" id="button_2_title" name="button_2_title" value="<?php echo wptexturize( esc_html( $button_2_title ) ); ?>" size="25" />
+			</p>
+		</div>
 	<?php
 	}
 
@@ -229,20 +178,22 @@ class Pico_Slider {
 	 */
 	public function save_slider_meta() {
 
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
+		}
 
-		if ( empty( $_POST['slider_nonce'] ) || ! wp_verify_nonce( $_POST['slider_nonce'], plugin_basename( __FILE__ ) ) )
+		if ( empty( $_POST['slider_nonce'] ) || ! wp_verify_nonce( $_POST['slider_nonce'], plugin_basename( __FILE__ ) ) ) {
 			return;
+		}
 		$valid = array(
-        'alignleft' => 'alignleft',
-        'alignright' => 'alignright',
-        'aligncenter' => 'aligncenter',
-				'alignnone' => 'alignnone',
-    );
-    if ( ! array_key_exists( $_POST['imagealignment'], $valid ) ) {
-        $_POST['imagealignment'] = 'alignnone';
-    }
+			'alignleft'   => 'alignleft',
+			'alignright'  => 'alignright',
+			'aligncenter' => 'aligncenter',
+			'alignnone'   => 'alignnone',
+		);
+		if ( ! array_key_exists( $_POST['imagealignment'], $valid ) ) {
+			$_POST['imagealignment'] = 'alignnone';
+		}
 		update_post_meta( $_POST['ID'], 'imagealignment', $_POST['imagealignment'] );
 		update_post_meta( $_POST['ID'], 'slider_video_url', esc_url( $_POST['slider_video_url'] ) );
 		update_post_meta( $_POST['ID'], 'button_1_link', esc_url( $_POST['button_1_link'] ) );
@@ -279,17 +230,18 @@ class Pico_Slider {
 		// beware of translated admin
 		if ( ! empty ( $post_type ) && 'slider' == $post_type ) {
 			$image_alignment = get_post_meta( $post_ID, 'imagealignment', true );
-			$output = str_replace( 'Set featured image', 'Select / Upload a slider image', $output );
-			$output = str_replace( 'Remove featured image', 'Remove slider image', $output );
+			$output          = str_replace( 'Set featured image', 'Select / Upload a slider image', $output );
+			$output          = str_replace( 'Remove featured image', 'Remove slider image', $output );
 
 			if ( has_post_thumbnail( $post_ID ) ) {
 				$output .= "<p>Choose the image alignment:</p>";
-				$output .= '<label for="alignleft"><input type="radio" name="imagealignment" value="alignleft" id="alignleft"' . checked( $image_alignment, 'alignleft' , false ) . '> Left</input></label><br>';
-				$output .= '<label for="aligncenter"><input type="radio" name="imagealignment" value="aligncenter" id="aligncenter"' . checked( $image_alignment, 'aligncenter' , false ) . '> Center</input></label><br>';
-				$output .= '<label for="alignright"><input type="radio" name="imagealignment" value="alignright" id="alignright"' . checked( $image_alignment, 'alignright' , false ) . '> Right</input></label><br>';
-				$output .= '<label for="alignnone"><input type="radio" name="imagealignment" value="alignnone" id="alignnone"' . checked( $image_alignment, 'alignnone' , false ) . '> None</input></label><br>';
+				$output .= '<label for="alignleft"><input type="radio" name="imagealignment" value="alignleft" id="alignleft"' . checked( $image_alignment, 'alignleft', false ) . '> Left</input></label><br>';
+				$output .= '<label for="aligncenter"><input type="radio" name="imagealignment" value="aligncenter" id="aligncenter"' . checked( $image_alignment, 'aligncenter', false ) . '> Center</input></label><br>';
+				$output .= '<label for="alignright"><input type="radio" name="imagealignment" value="alignright" id="alignright"' . checked( $image_alignment, 'alignright', false ) . '> Right</input></label><br>';
+				$output .= '<label for="alignnone"><input type="radio" name="imagealignment" value="alignnone" id="alignnone"' . checked( $image_alignment, 'alignnone', false ) . '> None</input></label><br>';
 			}
 		}
+
 		return $output;
 	}
 
