@@ -20,13 +20,12 @@ class Pico_Slider {
 
 	public function __construct() {
 		add_action( 'init',                      array( $this, 'register_slider' ) );
-		add_action( 'init',                      array ( $this, 'slider_rewrite_flush' ) );
+		add_action( 'init',                      array( $this, 'slider_rewrite_flush' ) );
 		add_action( 'wp_enqueue_scripts',        array( $this, 'slider_scripts' ) );
 		add_action( 'save_post',                 array( $this, 'save_slider_meta' ) );
 		add_action( 'add_meta_boxes',            array( $this, 'add_slider_meta_boxes' ) );
 		add_filter( 'enter_title_here',          array( $this, 'change_slider_title' ) );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'slider_post_thumbnail_html' ) );
-		add_action( 'admin_enqueue_scripts',     array( $this, 'add_styles' ) );
 	}
 
 	public function register_slider() {
@@ -54,6 +53,7 @@ class Pico_Slider {
 			'public'              => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
+			'menu_icon'           => 'dashicons-slides',
 			'menu_position'       => 20,
 			'show_in_nav_menus'   => false,
 			'publicly_queryable'  => true,
@@ -291,11 +291,6 @@ class Pico_Slider {
 			}
 		}
 		return $output;
-	}
-
-	public function add_styles(){
-		wp_register_style( 'pico_slider_styles', plugins_url( 'pico-slider/css/style.css', dirname( __FILE__ ) ), false, '1.0.0' );
-		wp_enqueue_style( 'pico_slider_styles' );
 	}
 
 }
