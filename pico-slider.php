@@ -31,18 +31,19 @@ class Pico_Slider {
 
 	public function register_slider() {
 		$labels = array(
-			'name'               => _x( 'Sliders', 'slider' ),
-			'singular_name'      => _x( 'Slider', 'slider' ),
+			'name'               => _x( 'Slide', 'slider' ),
+			'singular_name'      => _x( 'Slide', 'slider' ),
 			'add_new'            => _x( 'Add New', 'slider' ),
-			'add_new_item'       => _x( 'Add New Slider', 'slider' ),
-			'edit_item'          => _x( 'Edit Slider', 'slider' ),
-			'new_item'           => _x( 'New Slider', 'slider' ),
-			'view_item'          => _x( 'View Slider', 'slider' ),
-			'search_items'       => _x( 'Search Sliders', 'slider' ),
-			'not_found'          => _x( 'No sliders found', 'slider' ),
-			'not_found_in_trash' => _x( 'No sliders found in Trash', 'slider' ),
-			'parent_item_colon'  => _x( 'Parent Slider:', 'slider' ),
-			'menu_name'          => _x( 'Sliders', 'slider' ),
+			'add_new_item'       => _x( 'Add New Slide', 'slider' ),
+			'edit_item'          => _x( 'Edit Slide', 'slider' ),
+			'new_item'           => _x( 'New Slide', 'slider' ),
+			'view_item'          => _x( 'View Slide', 'slider' ),
+			'search_items'       => _x( 'Search Slides', 'slider' ),
+			'not_found'          => _x( 'No slides found', 'slider' ),
+			'not_found_in_trash' => _x( 'No slides found in Trash', 'slider' ),
+			'parent_item_colon'  => _x( 'Parent Slide:', 'slider' ),
+			'menu_name'          => _x( 'Slider', 'slider' ),
+			'all_items'          => _x( 'All Slides', 'slider' ),
 		);
 
 		$args = array(
