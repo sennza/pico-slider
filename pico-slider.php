@@ -51,7 +51,7 @@ class Pico_Slider {
 			'labels'              => $labels,
 			'hierarchical'        => false,
 			'description'         => 'A custom post type to easily generate slideshows',
-			'supports'            => array( 'title', 'editor', 'thumbnail' ),
+			'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 			'public'              => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
@@ -65,6 +65,7 @@ class Pico_Slider {
 			'can_export'          => true,
 			'rewrite'             => true,
 			'capability_type'     => 'post',
+			'menu_icon'           => 'dashicons-slides'
 		);
 
 		register_post_type( 'slider', $args );
