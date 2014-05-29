@@ -49,7 +49,7 @@ class Pico_Slider {
 			'labels'              => $labels,
 			'hierarchical'        => false,
 			'description'         => 'A custom post type to easily generate slideshows',
-			'supports'            => array( 'title', 'editor', 'thumbnail' ),
+			'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 			'public'              => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
