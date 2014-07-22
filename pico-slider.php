@@ -34,6 +34,7 @@ class Pico_Slider {
 	}
 
 	public function __construct() {
+		add_action( 'init', array( $this, 'set_defaults' ) );
 		add_action( 'init', array( $this, 'register_slider' ) );
 		add_action( 'init', array( $this, 'slider_rewrite_flush' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'slider_scripts' ) );
@@ -41,6 +42,13 @@ class Pico_Slider {
 		add_action( 'add_meta_boxes', array( $this, 'add_slider_meta_boxes' ) );
 		add_filter( 'enter_title_here', array( $this, 'change_slider_title' ) );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'slider_post_thumbnail_html' ) );
+	}
+
+	public function set_defaults() {
+
+		$defaults = wp_parse_args( apply_filters( 'pico_slider_set_defaults', $this->defaults ), $this->defaults );
+
+		$this->defaults = $defaults;
 	}
 
 	public function register_slider() {
