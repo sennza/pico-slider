@@ -6,7 +6,7 @@ Plugin URI: http://www.sennza.com.au/
 Description: A slider that uses a Custom Post Type and Sequence.js for the slide transitions
 Author: Sennza Pty Ltd, Bronson Quick, Tarei King, Lachlan MacPherson
 Author URI: http://www.sennza.com.au/
-Version: 1.0
+Version: 1.1
 */
 
 class Pico_Slider {
