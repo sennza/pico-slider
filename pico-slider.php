@@ -7,6 +7,8 @@ Description: A slider that uses a Custom Post Type and Sequence.js for the slide
 Author: Sennza Pty Ltd, Bronson Quick, Tarei King, Lachlan MacPherson
 Author URI: http://www.sennza.com.au/
 Version: 1.1
+License: GPL2
+GitHub Plugin URI: https://github.com/sennza/pico-slider
 */
 
 // Exit if this file is directly accessed
