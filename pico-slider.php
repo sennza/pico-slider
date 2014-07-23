@@ -231,6 +231,16 @@ class Pico_Slider {
 		if ( empty( $_POST['slider_nonce'] ) || ! wp_verify_nonce( $_POST['slider_nonce'], plugin_basename( __FILE__ ) ) ) {
 			return;
 		}
+		$meta_defaults = array (
+			'box_1'           => true, 	// Boolean, true or false
+			'box_2'           => true, 	// Boolean, true or false
+			'video'           => true, 	// Boolean, true or false
+		);
+
+		$meta_args = apply_filters( 'pico_slider_meta_args', $meta_args = array() );
+
+		$meta_args = wp_parse_args( $meta_args, $meta_defaults );
+
 		$valid = array(
 			'alignleft'   => 'alignleft',
 			'alignright'  => 'alignright',
@@ -243,18 +253,18 @@ class Pico_Slider {
 		update_post_meta( $_POST['ID'], 'imagealignment', $_POST['imagealignment'] );
 
 		// Video Box
-		if ( $this->defaults['custom_meta_options']['video'] ) {
+		if ( $meta_args['video'] ) {
 			update_post_meta( $_POST['ID'], 'slider_video_url', esc_url( $_POST['slider_video_url'] ) );
 		}
 
 		// CTA Button 1
-		if ( $this->defaults['custom_meta_options']['box_1'] ) {
+		if ( $meta_args['box_1'] ) {
 			update_post_meta( $_POST['ID'], 'button_1_link', esc_url( $_POST['button_1_link'] ) );
 			update_post_meta( $_POST['ID'], 'button_1_title', esc_html( $_POST['button_1_title'] ) );
 		}
 
 		// CTA Button 2
-		if ( $this->defaults['custom_meta_options']['box_1'] ) {
+		if ( $meta_args['box_1'] ) {
 			update_post_meta( $_POST['ID'], 'button_2_link', esc_url( $_POST['button_2_link'] ) );
 			update_post_meta( $_POST['ID'], 'button_2_title', esc_html( $_POST['button_2_title'] ) );
 		}
