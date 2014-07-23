@@ -86,7 +86,6 @@ class Pico_Slider {
 			'can_export'          => true,
 			'rewrite'             => true,
 			'capability_type'     => 'post',
-			'menu_icon'           => 'dashicons-slides'
 		);
 
 		$args = wp_parse_args( apply_filters( 'pico_slider_cpt_args', $args ), $args );
