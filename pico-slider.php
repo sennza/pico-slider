@@ -13,8 +13,6 @@ class Pico_Slider {
 	private static $instance;
 
 	public $defaults = array(
-		'image_width'         => 970, 		// Height in Pixels: 9999 == any height
-		'image_height'        => 9999, 		// Height in Pixels: 9999 == any height
 		'custom_meta_options' =>
 			array (
 				'box_1'           => true, 	// Boolean, true or false
@@ -94,7 +92,16 @@ class Pico_Slider {
 
 		register_post_type( 'slider', $cpt_args );
 
-		add_image_size( 'slider-thumb', $this->defaults['image_width'], $this->defaults['image_height'] );
+		$image_defaults = array(
+			'image_width'         => 970, 		// Height in Pixels: 9999 == any height
+			'image_height'        => 9999, 		// Height in Pixels: 9999 == any height
+		);
+
+		$image_args = apply_filters( 'pico_slider_image_args', $image_args = array() );
+
+		$image_args = wp_parse_args( $image_args, $image_defaults );
+
+		add_image_size( 'slider-thumb', $image_args['image_width'], $image_args['image_height'] );
 	}
 
 	public function do_slider( $args ) {
@@ -299,4 +306,3 @@ class Pico_Slider {
 }
 
 Pico_Slider::get_instance();
-
