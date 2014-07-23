@@ -22,12 +22,13 @@ class Pico_Slider {
 
 	public function __construct() {
 		add_action( 'init',                      array( $this, 'register_slider' ) );
-		add_action( 'init',                      array( $this, 'slider_rewrite_flush' ) );
 		add_action( 'wp_enqueue_scripts',        array( $this, 'slider_scripts' ) );
 		add_action( 'save_post',                 array( $this, 'save_slider_meta' ) );
 		add_action( 'add_meta_boxes',            array( $this, 'add_slider_meta_boxes' ) );
 		add_filter( 'enter_title_here',          array( $this, 'change_slider_title' ) );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'slider_post_thumbnail_html' ) );
+		register_activation_hook( __FILE__,      array( $this, 'slider_rewrite_flush' ) );
+		register_deactivation_hook( __FILE__,    array( $this, 'slider_rewrite_flush' ) );
 	}
 
 	/**
@@ -292,7 +293,7 @@ class Pico_Slider {
 	}
 
 	/**
-	 * Flush the rewrite rules on activation
+	 * Flush the rewrite rules on activation and deactivation
 	 */
 	public function slider_rewrite_flush() {
 		Pico_Slider::get_instance();
