@@ -21,15 +21,18 @@ class Pico_Slider {
 	}
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'register_slider' ) );
-		add_action( 'init', array( $this, 'slider_rewrite_flush' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'slider_scripts' ) );
-		add_action( 'save_post', array( $this, 'save_slider_meta' ) );
-		add_action( 'add_meta_boxes', array( $this, 'add_slider_meta_boxes' ) );
-		add_filter( 'enter_title_here', array( $this, 'change_slider_title' ) );
+		add_action( 'init',                      array( $this, 'register_slider' ) );
+		add_action( 'init',                      array( $this, 'slider_rewrite_flush' ) );
+		add_action( 'wp_enqueue_scripts',        array( $this, 'slider_scripts' ) );
+		add_action( 'save_post',                 array( $this, 'save_slider_meta' ) );
+		add_action( 'add_meta_boxes',            array( $this, 'add_slider_meta_boxes' ) );
+		add_filter( 'enter_title_here',          array( $this, 'change_slider_title' ) );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'slider_post_thumbnail_html' ) );
 	}
 
+	/**
+	 * Register our slider custom post type
+	 */
 	public function register_slider() {
 		$labels = array(
 			'name'               => _x( 'Slide', 'slider' ),
@@ -85,6 +88,12 @@ class Pico_Slider {
 		add_image_size( 'slider-thumb', $image_args['image_width'], $image_args['image_height'] );
 	}
 
+	/**
+	 * Find the slider template and generate the file. This checks inside our theme then falls back to the template
+	 * inside the plugin
+	 *
+	 * @param $args
+	 */
 	public function do_slider( $args ) {
 		$plugindir        = dirname( __FILE__ );
 		$templatefilename = 'slider-template.php';
@@ -97,6 +106,9 @@ class Pico_Slider {
 		}
 	}
 
+	/**
+	 * Enqueue our scripts
+	 */
 	public function slider_scripts() {
 		if ( is_front_page() ):
 			wp_enqueue_script( 'pico-flexslider', plugins_url( '/js/jquery.flexslider-min.js', __FILE__ ), array( 'jquery' ), '2.1', true );
@@ -108,6 +120,9 @@ class Pico_Slider {
 		endif;
 	}
 
+	/**
+	 * Add our meta boxes
+	 */
 	public function add_slider_meta_boxes() {
 		$meta_defaults = array (
 			'box_1'           => true, 	// Boolean, true or false
@@ -138,6 +153,9 @@ class Pico_Slider {
 		add_meta_box( 'postimagediv', 'Slider Image', 'post_thumbnail_meta_box', 'slider', 'side' );
 	}
 
+	/**
+	 * Generate our Video meta box
+	 */
 	public function slider_video_meta_box() {
 		global $post_ID;
 		?>
@@ -158,6 +176,9 @@ class Pico_Slider {
 	<?php
 	}
 
+	/**
+	 * Generate our custom meta boxes for the Call To Actions
+	 */
 	public function cta_meta_box() {
 		global $post_ID;
 		$meta_defaults = array (
@@ -270,10 +291,9 @@ class Pico_Slider {
 		}
 	}
 
-	/*
+	/**
 	 * Flush the rewrite rules on activation
 	 */
-
 	public function slider_rewrite_flush() {
 		Pico_Slider::get_instance();
 		flush_rewrite_rules();
@@ -281,6 +301,9 @@ class Pico_Slider {
 
 	/**
 	 * Filter the title placeholder text
+	 *
+	 * @param $title
+	 * @return string|void
 	 */
 	public function change_slider_title( $title ) {
 		$screen = get_current_screen();
@@ -292,6 +315,12 @@ class Pico_Slider {
 		return $title;
 	}
 
+	/**
+	 * Add some alignment options for our slider
+	 *
+	 * @param $output
+	 * @return mixed|string
+	 */
 	function slider_post_thumbnail_html( $output ) {
 		global $post_type, $post_ID;
 
