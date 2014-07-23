@@ -50,7 +50,7 @@ class Pico_Slider {
 		$cpt_defaults = array(
 			'labels'              => $labels,
 			'hierarchical'        => false,
-			'description'         => 'A custom post type to easily generate slideshows',
+			'description'         => _x( 'A custom post type to easily generate slideshows', 'slider' ),
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 			'public'              => false,
 			'show_ui'             => true,
