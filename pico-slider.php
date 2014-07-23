@@ -12,17 +12,6 @@ Version: 1.0
 class Pico_Slider {
 	private static $instance;
 
-	public $defaults = array(
-		'custom_meta_options' =>
-			array (
-				'box_1'           => true, 	// Boolean, true or false
-				'box_2'           => true, 	// Boolean, true or false
-				'video'           => true, 	// Boolean, true or false
-			),
-		);
-
-
-
 	static function get_instance() {
 		if ( ! self::$instance ) {
 			self::$instance = new Pico_Slider;
@@ -32,7 +21,6 @@ class Pico_Slider {
 	}
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'set_defaults' ) );
 		add_action( 'init', array( $this, 'register_slider' ) );
 		add_action( 'init', array( $this, 'slider_rewrite_flush' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'slider_scripts' ) );
@@ -40,13 +28,6 @@ class Pico_Slider {
 		add_action( 'add_meta_boxes', array( $this, 'add_slider_meta_boxes' ) );
 		add_filter( 'enter_title_here', array( $this, 'change_slider_title' ) );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'slider_post_thumbnail_html' ) );
-	}
-
-	public function set_defaults() {
-
-		$defaults = wp_parse_args( apply_filters( 'pico_slider_set_defaults', $this->defaults ), $this->defaults );
-
-		$this->defaults = $defaults;
 	}
 
 	public function register_slider() {
@@ -128,8 +109,17 @@ class Pico_Slider {
 	}
 
 	public function add_slider_meta_boxes() {
+		$meta_defaults = array (
+			'box_1'           => true, 	// Boolean, true or false
+			'box_2'           => true, 	// Boolean, true or false
+			'video'           => true, 	// Boolean, true or false
+		);
 
-		if ( $this->defaults['custom_meta_options']['video'] ) {
+		$meta_args = apply_filters( 'pico_slider_meta_args', $meta_args = array() );
+
+		$meta_args = wp_parse_args( $meta_args, $meta_defaults );
+
+		if ( $meta_args['video'] ) {
 			add_meta_box( 'slider_video_meta_box', __( 'Video Url' ), array(
 					$this,
 					'slider_video_meta_box'
@@ -137,7 +127,7 @@ class Pico_Slider {
 			);
 		};
 
-		if ( $this->defaults['custom_meta_options']['box_1'] || $this->defaults['custom_meta_options']['box_2'] ) {
+		if ( $meta_args['box_1'] || $meta_args['box_2'] ) {
 			add_meta_box( 'cta_meta_box', __( 'Calls To Action' ), array(
 					$this,
 					'cta_meta_box'
@@ -149,7 +139,8 @@ class Pico_Slider {
 	}
 
 	public function slider_video_meta_box() {
-		global $post_ID; ?>
+		global $post_ID;
+		?>
 
 		<div id="video_meta">
 			<?php
@@ -168,14 +159,23 @@ class Pico_Slider {
 	}
 
 	public function cta_meta_box() {
-		global $post_ID; ?>
+		global $post_ID;
+		$meta_defaults = array (
+			'box_1'           => true, 	// Boolean, true or false
+			'box_2'           => true, 	// Boolean, true or false
+			'video'           => true, 	// Boolean, true or false
+		);
+
+		$meta_args = apply_filters( 'pico_slider_meta_args', $meta_args = array() );
+
+		$meta_args = wp_parse_args( $meta_args, $meta_defaults ); ?>
 
 		<div id="slider_meta">
 			<?php
 			wp_nonce_field( plugin_basename( __FILE__ ), 'slider_nonce' );
 
 			# Button 1 Link
-			if ( $this->defaults['custom_meta_options']['box_1'] ) {
+			if ( $meta_args['box_1'] ) {
 				$button_1_link  = get_post_meta( $post_ID, 'button_1_link', true );
 				$button_1_title = get_post_meta( $post_ID, 'button_1_title', true );
 			?>
@@ -194,7 +194,7 @@ class Pico_Slider {
 			} # End Button 1
 
 			# Button 2 Link
-			if ( $this->defaults['custom_meta_options']['box_2'] ) {
+			if ( $meta_args['box_2'] ) {
 				$button_2_link  = get_post_meta( $post_ID, 'button_2_link', true );
 				$button_2_title = get_post_meta( $post_ID, 'button_2_title', true );
 			?>
