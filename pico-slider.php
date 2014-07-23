@@ -52,7 +52,7 @@ class Pico_Slider {
 	}
 
 	public function register_slider() {
-		$defaults = array(
+		$labels = array(
 			'name'               => _x( 'Slide', 'slider' ),
 			'singular_name'      => _x( 'Slide', 'slider' ),
 			'add_new'            => _x( 'Add New', 'slider' ),
@@ -67,8 +67,6 @@ class Pico_Slider {
 			'menu_name'          => _x( 'Slider', 'slider' ),
 			'all_items'          => _x( 'All Slides', 'slider' ),
 		);
-
-		$labels = wp_parse_args( apply_filters( 'pico_slider_cpt_labels', $defaults ), $defaults );
 
 		$args = array(
 			'labels'              => $labels,
