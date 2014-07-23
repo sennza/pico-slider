@@ -174,43 +174,43 @@ class Pico_Slider {
 			<?php
 			wp_nonce_field( plugin_basename( __FILE__ ), 'slider_nonce' );
 
-			# Button 1 Link
+			// Button 1 Link
 			if ( $meta_args['box_1'] ) {
 				$button_1_link  = get_post_meta( $post_ID, 'button_1_link', true );
 				$button_1_title = get_post_meta( $post_ID, 'button_1_title', true );
-			?>
-			<p>
-				<label for="button_1_link" style="width:80px; display:inline-block;"><?php _e( "Button 1 Link:" ); ?></label>
-				<input type="text" id="button_1_link" name="button_1_link" value="<?php echo wptexturize( esc_html( $button_1_link ) ); ?>" size="25" />
-			</p>
-			<?php
-			# Button 1 Title
-			?>
-			<p>
-				<label for="button_1_title" style="width:80px; display:inline-block;"><?php _e( "Button 1 Title:" ); ?></label>
-				<input type="text" id="button_1_title" name="button_1_title" value="<?php echo wptexturize( esc_html( $button_1_title ) ); ?>" size="25" />
-			</p>
-			<?php
-			} # End Button 1
+				?>
+				<p>
+					<label for="button_1_link" style="width:80px; display:inline-block;"><?php _e( "Button 1 Link:" ); ?></label>
+					<input type="text" id="button_1_link" name="button_1_link" value="<?php echo wptexturize( esc_html( $button_1_link ) ); ?>" size="25" />
+				</p>
+				<?php
+				// Button 1 Title ?>
+				<p>
+					<label for="button_1_title" style="width:80px; display:inline-block;"><?php _e( "Button 1 Title:" ); ?></label>
+					<input type="text" id="button_1_title" name="button_1_title" value="<?php echo wptexturize( esc_html( $button_1_title ) ); ?>" size="25" />
+				</p>
+				<?php
+			}
+			// End Button 1
 
-			# Button 2 Link
+			// Button 2 Link
 			if ( $meta_args['box_2'] ) {
 				$button_2_link  = get_post_meta( $post_ID, 'button_2_link', true );
 				$button_2_title = get_post_meta( $post_ID, 'button_2_title', true );
-			?>
-			<p>
-				<label for="button_2_link" style="width:80px; display:inline-block;"><?php _e( "Button 2 Link:" ); ?></label>
-				<input type="text" id="button_2_link" name="button_2_link" value="<?php echo wptexturize( esc_html( $button_2_link ) ); ?>" size="25" />
-			</p>
-			<?php
-			## Button 2 Title
-			?>
-			<p>
-				<label for="button_2_title" style="width:80px; display:inline-block;"><?php _e( "Button 2 Title:" ); ?></label>
-				<input type="text" id="button_2_title" name="button_2_title" value="<?php echo wptexturize( esc_html( $button_2_title ) ); ?>" size="25" />
-			</p>
-			<?php
-			} # End Buton 2
+				?>
+				<p>
+					<label for="button_2_link" style="width:80px; display:inline-block;"><?php _e( "Button 2 Link:" ); ?></label>
+					<input type="text" id="button_2_link" name="button_2_link" value="<?php echo wptexturize( esc_html( $button_2_link ) ); ?>" size="25" />
+				</p>
+				<?php
+				// Button 2 Title ?>
+				<p>
+					<label for="button_2_title" style="width:80px; display:inline-block;"><?php _e( "Button 2 Title:" ); ?></label>
+					<input type="text" id="button_2_title" name="button_2_title" value="<?php echo wptexturize( esc_html( $button_2_title ) ); ?>" size="25" />
+				</p>
+				<?php
+			}
+			// End Button 2
 			?>
 		</div>
 	<?php
@@ -242,18 +242,18 @@ class Pico_Slider {
 		}
 		update_post_meta( $_POST['ID'], 'imagealignment', $_POST['imagealignment'] );
 
-		# Video Box
+		// Video Box
 		if ( $this->defaults['custom_meta_options']['video'] ) {
 			update_post_meta( $_POST['ID'], 'slider_video_url', esc_url( $_POST['slider_video_url'] ) );
 		}
 
-		# CTA Button 1
+		// CTA Button 1
 		if ( $this->defaults['custom_meta_options']['box_1'] ) {
 			update_post_meta( $_POST['ID'], 'button_1_link', esc_url( $_POST['button_1_link'] ) );
 			update_post_meta( $_POST['ID'], 'button_1_title', esc_html( $_POST['button_1_title'] ) );
 		}
 
-		#CTA Button 2
+		// CTA Button 2
 		if ( $this->defaults['custom_meta_options']['box_1'] ) {
 			update_post_meta( $_POST['ID'], 'button_2_link', esc_url( $_POST['button_2_link'] ) );
 			update_post_meta( $_POST['ID'], 'button_2_title', esc_html( $_POST['button_2_title'] ) );
