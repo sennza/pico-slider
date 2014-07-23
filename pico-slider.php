@@ -9,6 +9,9 @@ Author URI: http://www.sennza.com.au/
 Version: 1.1
 */
 
+// Exit if this file is directly accessed
+if ( !defined( 'ABSPATH' ) ) exit;
+
 class Pico_Slider {
 	private static $instance;
 
