@@ -68,7 +68,7 @@ class Pico_Slider {
 			'all_items'          => _x( 'All Slides', 'slider' ),
 		);
 
-		$args = array(
+		$defaults = array(
 			'labels'              => $labels,
 			'hierarchical'        => false,
 			'description'         => 'A custom post type to easily generate slideshows',
@@ -88,7 +88,9 @@ class Pico_Slider {
 			'capability_type'     => 'post',
 		);
 
-		$args = wp_parse_args( apply_filters( 'pico_slider_cpt_args', $args ), $args );
+		$args = apply_filters( 'pico_slider_cpt_args', $args = array() );
+
+		$args = wp_parse_args( $args, $defaults );
 
 		register_post_type( 'slider', $args );
 
@@ -297,3 +299,4 @@ class Pico_Slider {
 }
 
 Pico_Slider::get_instance();
+
